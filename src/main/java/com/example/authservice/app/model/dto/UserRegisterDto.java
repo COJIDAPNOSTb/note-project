@@ -9,5 +9,4 @@ import java.util.Set;
 public class UserRegisterDto {
     private String username;
     private String password;
-    private Set<String> roles;
 }

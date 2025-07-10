@@ -29,15 +29,21 @@ public class AuthService {
     private final JwtService jwtService;
 
     public JwtResponseDto register(UserRegisterDto request) {
+        if (userRepository.existsByUsername(request.getUsername())) {
+            throw new RuntimeException("Username already exists");
+        }
+
         User user = User.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .roles(Set.of(Role.USER))
+                .roles(Set.of(Role.USER)) // DEFAULT
                 .build();
+
         userRepository.save(user);
         String jwt = jwtService.generateToken(new CustomUserDetails(user));
         return new JwtResponseDto(jwt);
     }
+
 
     public JwtResponseDto login(UserLoginDto request) {
         authenticationManager.authenticate(
