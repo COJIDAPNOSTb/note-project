@@ -13,13 +13,13 @@ public class TestController {
     @GetMapping("/user")
     public String testUser()
     {
-        return "You is User!";
+        return "You are User!";
     }
 
     @GetMapping("/admin")
     @Secured("ROLE_ADMIN")
     public String testAdmin()
     {
-        return "You is Admin!";
+        return "You are Admin!";
     }
 }

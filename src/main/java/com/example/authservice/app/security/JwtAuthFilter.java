@@ -5,6 +5,7 @@ package com.example.authservice.app.security;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.*;
@@ -20,6 +21,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserDetailsServiceImpl userDetailsService;
+    private final  TokenBlacklistService tokenBlacklistService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -36,9 +38,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             return;
         }
 
+
+
         jwt = authHeader.substring(7);
         username = jwtService.extractUsername(jwt);
 
+        if (tokenBlacklistService.isBlacklisted(jwt)) {
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            return;
+        }
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 

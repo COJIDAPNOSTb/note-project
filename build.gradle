@@ -40,6 +40,10 @@ dependencies {
     testImplementation 'org.testcontainers:testcontainers'
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.testcontainers:postgresql'
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+    implementation 'org.flywaydb:flyway-core'
+
+    implementation 'org.flywaydb:flyway-database-postgresql:10.12.0'
 }
 
 tasks.named('test') {

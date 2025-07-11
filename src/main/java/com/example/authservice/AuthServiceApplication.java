@@ -9,7 +9,9 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 public class AuthServiceApplication {
 
     public static void main(String[] args) {
+        System.out.println("Hello World!");
         SpringApplication.run(AuthServiceApplication.class, args);
+        System.out.println("Hello World!");
     }
 
 }

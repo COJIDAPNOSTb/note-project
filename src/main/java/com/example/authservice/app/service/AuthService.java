@@ -10,14 +10,14 @@ import com.example.authservice.app.model.dto.UserRegisterDto;
 import com.example.authservice.app.repository.UserRepository;
 import com.example.authservice.app.security.CustomUserDetails;
 import com.example.authservice.app.security.JwtService;
+import com.example.authservice.app.security.TokenBlacklistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.*;
-import org.springframework.security.core.userdetails.UserDetails;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +27,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final TokenBlacklistService tokenBlacklistService;
 
     public JwtResponseDto register(UserRegisterDto request) {
         if (userRepository.existsByUsername(request.getUsername())) {
@@ -56,5 +57,11 @@ public class AuthService {
                 .orElseThrow();
         String jwt = jwtService.generateToken(new CustomUserDetails(user));
         return new JwtResponseDto(jwt);
+    }
+    public void logout(String authHeader) {
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            tokenBlacklistService.blacklist(token);
+        }
     }
 }

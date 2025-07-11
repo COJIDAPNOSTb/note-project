@@ -25,4 +25,11 @@ public class AuthController {
     public ResponseEntity<JwtResponseDto> login(@RequestBody UserLoginDto request) {
         return ResponseEntity.ok(authService.login(request));
     }
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(@RequestHeader("Authorization") String authHeader) {
+        authService.logout(authHeader);
+        return ResponseEntity.ok().build();
+    }
+
+
 }

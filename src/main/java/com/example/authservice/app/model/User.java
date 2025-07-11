@@ -23,7 +23,6 @@ public class User {
     private String username;
     @Column(nullable = false)
     private String password;
-
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
